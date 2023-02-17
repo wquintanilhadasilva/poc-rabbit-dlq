@@ -1,0 +1,18 @@
+server:
+  port: 8082
+
+spring:
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+    listener:
+      simple:
+        retry:
+          enabled: true
+          max-attempts: 3
+          initial-interval: 10s
+          max-interval: 60s
+          multiplier: 3.0
+        acknowledge-mode: auto

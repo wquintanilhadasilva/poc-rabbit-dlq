@@ -1,0 +1,153 @@
+{
+  "rabbit_version": "3.5.7",
+  "users": [
+      {
+          "name": "admin",
+          "password_hash": "b/XedHeZ8AVWttrmlrs5Mjl+eKI=",
+          "tags": "administrator"
+      }
+  ],
+  "vhosts": [
+      {
+          "name": "/"
+      },
+      {
+          "name": "om"
+      }
+  ],
+  "permissions": [
+      {
+          "user": "admin",
+          "vhost": "/",
+          "configure": ".*",
+          "write": ".*",
+          "read": ".*"
+      },
+      {
+          "user": "admin",
+          "vhost": "om",
+          "configure": ".*",
+          "write": ".*",
+          "read": ".*"
+      }
+  ],
+  "parameters": [],
+  "policies": [],
+  "queues": [
+    {
+      "name": "dlq.mensagem",
+      "vhost": "/",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {
+        "x-dead-letter-exchange": "exc.processamento.dlq",
+        "x-dead-letter-routing-key": "dlqreproc.#",
+        "x-message-ttl": 60000,
+        "x-queue-type": "classic"
+      }
+    },
+    {
+      "name": "dlq.exclusaoManual",
+      "vhost": "/",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {
+        "x-queue-type": "classic"
+      }
+    },
+    {
+      "name": "q.mensagem",
+      "vhost": "/",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {
+        "x-dead-letter-exchange": "exc.mensagem.dlq",
+        "x-dead-letter-routing-key": "dlqmensagem.#",
+        "x-queue-type": "classic"
+      }
+    },
+    {
+      "name": "dlq.reprocessamento",
+      "vhost": "/",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {
+        "x-dead-letter-exchange": "exc.exclusao.dlq",
+        "x-dead-letter-routing-key": "dlqdel.#",
+        "x-queue-type": "classic"
+      }
+    }
+  ],
+  "exchanges": [
+    {
+      "name": "exc.mensagem",
+      "vhost": "/",
+      "type": "topic",
+      "durable": true,
+      "auto_delete": false,
+      "internal": false,
+      "arguments": {}
+    },
+    {
+      "name": "exc.exclusao.dlq",
+      "vhost": "/",
+      "type": "topic",
+      "durable": true,
+      "auto_delete": false,
+      "internal": false,
+      "arguments": {}
+    },
+    {
+      "name": "exc.processamento.dlq",
+      "vhost": "/",
+      "type": "topic",
+      "durable": true,
+      "auto_delete": false,
+      "internal": false,
+      "arguments": {}
+    },
+    {
+      "name": "exc.mensagem.dlq",
+      "vhost": "/",
+      "type": "topic",
+      "durable": true,
+      "auto_delete": false,
+      "internal": false,
+      "arguments": {}
+    }
+  ],
+  "bindings": [
+    {
+      "source": "exc.exclusao.dlq",
+      "vhost": "/",
+      "destination": "dlq.exclusaoManual",
+      "destination_type": "queue",
+      "routing_key": "dlqdel.#",
+      "arguments": {}
+    },
+    {
+      "source": "exc.mensagem",
+      "vhost": "/",
+      "destination": "q.mensagem",
+      "destination_type": "queue",
+      "routing_key": "mensagem.#",
+      "arguments": {}
+    },
+    {
+      "source": "exc.mensagem.dlq",
+      "vhost": "/",
+      "destination": "dlq.mensagem",
+      "destination_type": "queue",
+      "routing_key": "dlqmensagem.#",
+      "arguments": {}
+    },
+    {
+      "source": "exc.processamento.dlq",
+      "vhost": "/",
+      "destination": "dlq.reprocessamento",
+      "destination_type": "queue",
+      "routing_key": "dlqreproc.#",
+      "arguments": {}
+    }
+  ]
+}
