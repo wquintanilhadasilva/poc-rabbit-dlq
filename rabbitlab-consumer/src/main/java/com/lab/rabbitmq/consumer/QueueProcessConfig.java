@@ -32,5 +32,23 @@ public class QueueProcessConfig {
 				.to(exchangeProcess())
 				.with(TopicNames.MESSAGE_KEY_ORDERS);
 	}
+	
+//	@Bean
+//	public SimpleMessageListenerContainer processContainer(ConnectionFactory connectionFactory,
+//														   MessageListenerAdapter processListenerAdapter) {
+//		SimpleMessageListenerContainer container = new SimpleMessageListenerContainer();
+//		container.setConnectionFactory(connectionFactory);
+//		container.setQueues(queueProcess());
+//		container.setMessageListener(processListenerAdapter);
+//		container.setConcurrentConsumers(5); // define a quantidade de threads que vão processar as mensagens
+//		return container;
+//	}
+	
+
+	
+//	@Bean
+//	public MessageListenerAdapter processListenerAdapter(MessageListener myService) {
+//		return new MessageListenerAdapter(myService, "listener2");
+//	}
 
 }

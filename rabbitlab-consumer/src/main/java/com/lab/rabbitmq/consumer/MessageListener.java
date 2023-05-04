@@ -1,22 +1,24 @@
 package com.lab.rabbitmq.consumer;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
-import java.time.LocalDateTime;
 
 @Component
 @Slf4j
+@RequiredArgsConstructor
 public class MessageListener {
 	
-	@RabbitListener(queues = TopicNames.QUEUE_NAME_PROCESS)
+	private final MessageService messageService;
+	
+	@RabbitListener(queues = TopicNames.QUEUE_NAME_PROCESS, containerFactory = "rabbitListenerContainerFactory")
 	public void listener(Mensagem mensagem) throws Exception {
-		LocalDateTime lt = LocalDateTime.now();
-		log.info(lt.toString());
-		log.info("Processando mensagem: [{}]", mensagem);
-		if (mensagem.getStatus() != 1) {
-			throw new Exception("Sou o processador e consumo essa mensagem!");
-		}
+		messageService.listener(mensagem);
+	}
+	
+	public void listener2(Object msg) {
+		log.info("Processando listener2 [{}]", msg);
 	}
 
 }

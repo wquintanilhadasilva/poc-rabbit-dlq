@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import org.springframework.amqp.rabbit.config.SimpleRabbitListenerContainerFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -41,5 +42,15 @@ public class RabbitConfig {
 		rabbitTemplate.setMessageConverter(messageConverter);
 		return rabbitTemplate;
 	}
+	
+		@Bean
+		public SimpleRabbitListenerContainerFactory rabbitListenerContainerFactory(ConnectionFactory connectionFactory,
+				Jackson2JsonMessageConverter messageConverter) {
+			SimpleRabbitListenerContainerFactory factory = new SimpleRabbitListenerContainerFactory();
+			factory.setConnectionFactory(connectionFactory);
+			factory.setMessageConverter(messageConverter);
+			factory.setConcurrentConsumers(5); // define 5 threads simultâneas
+			return factory;
+		}
 	
 }
