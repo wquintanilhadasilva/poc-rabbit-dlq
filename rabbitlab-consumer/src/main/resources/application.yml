@@ -9,7 +9,7 @@ spring:
     password: guest
     listener:
       simple:
-        consumers: 5 # customizada
+        consumers: 5 # customizada // define 5 threads simultâneas
         retry:
           enabled: true
           max-attempts: 3
