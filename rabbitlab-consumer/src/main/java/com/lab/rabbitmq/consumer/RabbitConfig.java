@@ -5,11 +5,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.amqp.rabbit.config.RetryInterceptorBuilder;
 import org.springframework.amqp.rabbit.config.SimpleRabbitListenerContainerFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.rabbit.listener.ConditionalRejectingErrorHandler;
+import org.springframework.amqp.rabbit.retry.RejectAndDontRequeueRecoverer;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
@@ -59,6 +61,15 @@ public class RabbitConfig {
 		log.info("Número de consumidores [{}]", consumers);
 		factory.setConcurrentConsumers(consumers);
 		factory.setErrorHandler(new ConditionalRejectingErrorHandler(new ConditionalRejectingErrorHandler.DefaultExceptionStrategy()));
+		
+		// configura o retry utilizando o RetryInterceptorBuilder
+		RetryInterceptorBuilder retryInterceptorBuilder = RetryInterceptorBuilder.stateless()
+				.maxAttempts(3)
+				.backOffOptions(2000, 2.0, 60000) // intervalo inicial de 10 segundos, fator multiplicador de 2.0, tempo máximo de espera de 60 segundos
+				.recoverer(new RejectAndDontRequeueRecoverer()); // rejeita as mensagens e não as reenfileira
+		
+		factory.setAdviceChain(retryInterceptorBuilder.build()); // aplica o interceptor de retry no listener
+		
 		return factory;
 	}
 	

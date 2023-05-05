@@ -29,7 +29,7 @@ public class QueueProcessDlqConfig {
 			put("x-initial-interval", 10000); // intervalo inicial entre tentativas em milissegundos
 			put(TopicNames.QUEUE_ATTRIBUTE_DLQ_EXCHANGE, TopicNames.EXCHANGE_MSG_MANUAL);
 			put(TopicNames.QUEUE_ATTRIBUTE_DLQ_ROUTING_KEY, TopicNames.MESSAGE_KEY_ORDERS_MANUAL);
-			put("x-multiplier", 3); // fator multiplicador para calcular o intervalo de tentativas subsequentes
+			put("x-max-interval-multiplier", 3); // fator multiplicador para calcular o intervalo de tentativas subsequentes
 		}};
 //		args.put(X_RETRY_HEADER, 3);
 //		args.put(X_MESSAGE_TTL, 30000); //30s
