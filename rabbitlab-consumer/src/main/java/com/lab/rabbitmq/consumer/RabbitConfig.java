@@ -50,17 +50,17 @@ public class RabbitConfig {
 		return rabbitTemplate;
 	}
 	
-		@Bean
-		public SimpleRabbitListenerContainerFactory rabbitListenerContainerFactory(ConnectionFactory connectionFactory,
-				Jackson2JsonMessageConverter messageConverter) {
-			SimpleRabbitListenerContainerFactory factory = new SimpleRabbitListenerContainerFactory();
-			factory.setConnectionFactory(connectionFactory);
-			factory.setMessageConverter(messageConverter);
-			log.info("Número de consumidores [{}]", consumers);
-			factory.setConcurrentConsumers(consumers); // define 5 threads simultâneas
-			factory.setErrorHandler(new ConditionalRejectingErrorHandler());
-			factory.setErrorHandler(new ConditionalRejectingErrorHandler(new ConditionalRejectingErrorHandler.DefaultExceptionStrategy()));
-			return factory;
-		}
+	@Bean
+	public SimpleRabbitListenerContainerFactory rabbitListenerContainerFactory(ConnectionFactory connectionFactory,
+			Jackson2JsonMessageConverter messageConverter) {
+		SimpleRabbitListenerContainerFactory factory = new SimpleRabbitListenerContainerFactory();
+		factory.setConnectionFactory(connectionFactory);
+		factory.setMessageConverter(messageConverter);
+		log.info("Número de consumidores [{}]", consumers);
+		factory.setConcurrentConsumers(consumers); // define 5 threads simultâneas
+		factory.setErrorHandler(new ConditionalRejectingErrorHandler());
+		factory.setErrorHandler(new ConditionalRejectingErrorHandler(new ConditionalRejectingErrorHandler.DefaultExceptionStrategy()));
+		return factory;
+	}
 	
 }
