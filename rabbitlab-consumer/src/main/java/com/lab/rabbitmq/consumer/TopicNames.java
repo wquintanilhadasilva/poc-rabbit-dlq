@@ -10,4 +10,8 @@ public final class TopicNames {
 	public static final String QUEUE_NAME_PROCESS = "exch-orders.process";
 	public static final String QUEUE_NAME_DLQ = "exch-orders.dlq";
 	public static final String QUEUE_NAME_MANUAL = "exch-orders.manual";
+	
+	
+	public static final String QUEUE_ATTRIBUTE_DLQ_EXCHANGE = "x-dead-letter-exchange";
+	public static final String QUEUE_ATTRIBUTE_DLQ_ROUTING_KEY = "x-dead-letter-routing-key";
 }

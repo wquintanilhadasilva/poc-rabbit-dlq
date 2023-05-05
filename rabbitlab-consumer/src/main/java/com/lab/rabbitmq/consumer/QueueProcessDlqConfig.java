@@ -25,8 +25,8 @@ public class QueueProcessDlqConfig {
 		Map<String, Object> args = new HashMap<String, Object>();
 		args.put(X_RETRY_HEADER, 3);
 		args.put(X_MESSAGE_TTL, 30000); //30s
-		args.put("x-dead-letter-exchange", TopicNames.EXCHANGE_MSG_MANUAL);
-		args.put("x-dead-letter-routing-key", TopicNames.MESSAGE_KEY_ORDERS_MANUAL);
+		args.put(TopicNames.QUEUE_ATTRIBUTE_DLQ_EXCHANGE, TopicNames.EXCHANGE_MSG_MANUAL);
+		args.put(TopicNames.QUEUE_ATTRIBUTE_DLQ_ROUTING_KEY, TopicNames.MESSAGE_KEY_ORDERS_MANUAL);
 		return  new Queue(TopicNames.QUEUE_NAME_DLQ, true, false, true, args);
 	}
 	

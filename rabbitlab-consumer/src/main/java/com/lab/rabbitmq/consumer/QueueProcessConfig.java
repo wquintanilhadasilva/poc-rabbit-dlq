@@ -20,8 +20,8 @@ public class QueueProcessConfig {
 	@Bean
 	public Queue queueProcess() {
 		Map<String, Object> args = new HashMap<String, Object>();
-		args.put("x-dead-letter-exchange", TopicNames.EXCHANGE_MSG_DLQ);
-		args.put("x-dead-letter-routing-key", TopicNames.MESSAGE_KEY_ORDERS_DLQ);
+		args.put(TopicNames.QUEUE_ATTRIBUTE_DLQ_EXCHANGE, TopicNames.EXCHANGE_MSG_DLQ);
+		args.put(TopicNames.QUEUE_ATTRIBUTE_DLQ_ROUTING_KEY, TopicNames.MESSAGE_KEY_ORDERS_DLQ);
 			return  new Queue(TopicNames.QUEUE_NAME_PROCESS, true, false, true, args);
 	}
 	
@@ -32,23 +32,5 @@ public class QueueProcessConfig {
 				.to(exchangeProcess())
 				.with(TopicNames.MESSAGE_KEY_ORDERS);
 	}
-	
-//	@Bean
-//	public SimpleMessageListenerContainer processContainer(ConnectionFactory connectionFactory,
-//														   MessageListenerAdapter processListenerAdapter) {
-//		SimpleMessageListenerContainer container = new SimpleMessageListenerContainer();
-//		container.setConnectionFactory(connectionFactory);
-//		container.setQueues(queueProcess());
-//		container.setMessageListener(processListenerAdapter);
-//		container.setConcurrentConsumers(5); // define a quantidade de threads que vão processar as mensagens
-//		return container;
-//	}
-	
-
-	
-//	@Bean
-//	public MessageListenerAdapter processListenerAdapter(MessageListener myService) {
-//		return new MessageListenerAdapter(myService, "listener2");
-//	}
 
 }

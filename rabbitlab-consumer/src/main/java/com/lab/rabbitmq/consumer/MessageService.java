@@ -14,8 +14,9 @@ public class MessageService {
 		log.info(lt.toString());
 		log.info("Processando mensagem: [{}]", mensagem);
 		if (mensagem.getStatus() != 1) {
-			throw new AmqpRejectAndDontRequeueException("Sou o processador e consumo essa mensagem!");
+			throw new AmqpRejectAndDontRequeueException("Sou o processador e NÃO consumo essa mensagem: [" + mensagem + "]");
 		}
+		log.info("Sou o processador e CONSUMO essa mensagem: [{}]", mensagem);
 	}
 	
 	public void listenerDlq(Mensagem mensagem) throws Exception {
@@ -23,8 +24,9 @@ public class MessageService {
 		log.info(lt.toString());
 		log.info("DLQ Reprocessando mensagem: [{}]", mensagem);
 		if (mensagem.getStatus() > 2) {
-			throw new AmqpRejectAndDontRequeueException("Sou a DLQ e não consumo essa mensagem!");
+			throw new AmqpRejectAndDontRequeueException("Sou a DLQ e NÃO consumo essa mensagem: [" + mensagem + "]");
 		}
+		log.info("Sou o DLQ e CONSUMO essa mensagem: [{}]", mensagem);
 	}
 	
 }
