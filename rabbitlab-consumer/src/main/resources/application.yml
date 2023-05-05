@@ -9,6 +9,7 @@ spring:
     password: guest
     listener:
       simple:
+        consumers: 5 # customizada
         retry:
           enabled: true
           max-attempts: 3

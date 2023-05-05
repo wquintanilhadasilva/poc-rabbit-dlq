@@ -1,10 +1,16 @@
 version: '3.8'
 services:
   rabbitmq-lab:
+    # container_name: rabbitmq-lab
+    # image: rabbitmq:3.7-management
+    # ports:
+    # - 15672:15672
+    # - 5672:5672
     container_name: rabbitmq-lab
-    image: rabbitmq:3.7-management
+    image: rabbitmq:3.9.7-management
     ports:
-    - 15672:15672
-    - 5672:5672
-    # volumes:
-    #   - ./cert:/etc/rabbitmq/cert 
+      - 5672:5672
+      - 15672:15672
+    environment:
+      - RABBITMQ_USER=guest
+      - RABBITMQ_PASSWORD=guest

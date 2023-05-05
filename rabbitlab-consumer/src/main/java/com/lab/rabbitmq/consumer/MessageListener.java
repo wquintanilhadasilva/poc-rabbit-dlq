@@ -16,9 +16,5 @@ public class MessageListener {
 	public void listener(Mensagem mensagem) throws Exception {
 		messageService.listener(mensagem);
 	}
-	
-	public void listener2(Object msg) {
-		log.info("Processando listener2 [{}]", msg);
-	}
 
 }
