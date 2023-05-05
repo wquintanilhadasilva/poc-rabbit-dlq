@@ -58,7 +58,6 @@ public class RabbitConfig {
 		factory.setMessageConverter(messageConverter);
 		log.info("Número de consumidores [{}]", consumers);
 		factory.setConcurrentConsumers(consumers);
-		factory.setErrorHandler(new ConditionalRejectingErrorHandler());
 		factory.setErrorHandler(new ConditionalRejectingErrorHandler(new ConditionalRejectingErrorHandler.DefaultExceptionStrategy()));
 		return factory;
 	}

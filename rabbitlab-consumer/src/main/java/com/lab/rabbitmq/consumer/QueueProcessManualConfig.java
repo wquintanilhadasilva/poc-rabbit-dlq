@@ -10,8 +10,6 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class QueueProcessManualConfig {
 	
-	private static final String X_RETRY_HEADER = "x-dlq-retry";
-	
 	@Bean
 	public TopicExchange exchangeManual() {
 		return new TopicExchange(TopicNames.EXCHANGE_MSG_MANUAL);

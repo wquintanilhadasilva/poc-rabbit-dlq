@@ -10,10 +10,11 @@ spring:
     listener:
       simple:
         consumers: 5 # customizada // define 5 threads simultâneas
-        retry:
-          enabled: true
-          max-attempts: 3
-          initial-interval: 10s
-          max-interval: 60s
-          multiplier: 3.0
+        group: executores
         acknowledge-mode: auto
+#        retry:
+#          enabled: true
+#          max-attempts: 3
+#          initial-interval: 10s
+#          max-interval: 60s
+#          multiplier: 3.0
