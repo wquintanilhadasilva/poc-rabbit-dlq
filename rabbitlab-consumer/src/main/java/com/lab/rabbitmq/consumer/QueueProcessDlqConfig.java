@@ -23,20 +23,13 @@ public class QueueProcessDlqConfig {
 	@Bean
 	public Queue queueDlq() {
 		Map<String, Object> args = new HashMap<String, Object>(){{
-//			put(X_RETRY_HEADER, 3);
-//			put(X_MESSAGE_TTL, 30000); //30s
-//			put("x-max-retries", 3); // número máximo de tentativas de entrega
+			put(X_RETRY_HEADER, 3);
+			put(X_MESSAGE_TTL, 30000); //30s
+			put("x-custom-value", "custom-value"); // valor customizado
 //			put("x-initial-interval", 10000); // intervalo inicial entre tentativas em milissegundos
 			put(TopicNames.QUEUE_ATTRIBUTE_DLQ_EXCHANGE, TopicNames.EXCHANGE_MSG_MANUAL);
 			put(TopicNames.QUEUE_ATTRIBUTE_DLQ_ROUTING_KEY, TopicNames.MESSAGE_KEY_ORDERS_MANUAL);
-//			put("x-max-interval-multiplier", 3); // fator multiplicador para calcular o intervalo de tentativas subsequentes
 		}};
-//		args.put(X_RETRY_HEADER, 3);
-//		args.put(X_MESSAGE_TTL, 30000); //30s
-//		args.put("x-max-retries", 3); // número máximo de tentativas de entrega
-//		args.put("x-initial-interval", 10000); // intervalo inicial entre tentativas em milissegundos
-//		args.put(TopicNames.QUEUE_ATTRIBUTE_DLQ_EXCHANGE, TopicNames.EXCHANGE_MSG_MANUAL);
-//		args.put(TopicNames.QUEUE_ATTRIBUTE_DLQ_ROUTING_KEY, TopicNames.MESSAGE_KEY_ORDERS_MANUAL);
 		return  new Queue(TopicNames.QUEUE_NAME_DLQ, true, false, true, args);
 	}
 	
