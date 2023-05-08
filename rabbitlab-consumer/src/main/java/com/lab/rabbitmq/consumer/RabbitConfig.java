@@ -65,7 +65,28 @@ public class RabbitConfig {
 		// configura o retry utilizando o RetryInterceptorBuilder
 		RetryInterceptorBuilder retryInterceptorBuilder = RetryInterceptorBuilder.stateless()
 				.maxAttempts(3)
-				.backOffOptions(2000, 2.0, 60000) // intervalo inicial de 10 segundos, fator multiplicador de 2.0, tempo máximo de espera de 60 segundos
+				.backOffOptions(20000, 2.0, 60000) // intervalo inicial de 20 segundos, fator multiplicador de 2.0, tempo máximo de espera de 60 segundos
+				.recoverer(new RejectAndDontRequeueRecoverer()); // rejeita as mensagens e não as reenfileira
+		
+		factory.setAdviceChain(retryInterceptorBuilder.build()); // aplica o interceptor de retry no listener
+		
+		return factory;
+	}
+	
+	@Bean
+	public SimpleRabbitListenerContainerFactory dlqRabbitListenerContainerFactory(ConnectionFactory connectionFactory,
+																			   Jackson2JsonMessageConverter messageConverter) {
+		SimpleRabbitListenerContainerFactory factory = new SimpleRabbitListenerContainerFactory();
+		factory.setConnectionFactory(connectionFactory);
+		factory.setMessageConverter(messageConverter);
+		log.info("Número de consumidores DLQ [{}]", consumers);
+		factory.setConcurrentConsumers(consumers);
+		factory.setErrorHandler(new ConditionalRejectingErrorHandler(new ConditionalRejectingErrorHandler.DefaultExceptionStrategy()));
+		
+		// configura o retry utilizando o RetryInterceptorBuilder
+		RetryInterceptorBuilder retryInterceptorBuilder = RetryInterceptorBuilder.stateless()
+				.maxAttempts(4)
+				.backOffOptions(10000, 1.5, 60000) // intervalo inicial de 10 segundos, fator multiplicador de 1.5, tempo máximo de espera de 40 segundos
 				.recoverer(new RejectAndDontRequeueRecoverer()); // rejeita as mensagens e não as reenfileira
 		
 		factory.setAdviceChain(retryInterceptorBuilder.build()); // aplica o interceptor de retry no listener

@@ -12,9 +12,14 @@ spring:
         consumers: 5 # customizada // define 5 threads simultâneas
         group: executores
         acknowledge-mode: auto
-#        retry:
-#          enabled: true
-#          max-attempts: 3
-#          initial-interval: 10s
-#          max-interval: 60s
-#          multiplier: 3.0
+        retry:
+          enabled: true
+          max-attempts: 3
+          initial-interval: 10s
+          max-interval: 60s
+          multiplier: 3.0
+#        rabbitListenerContainerFactory1:
+#          retry:
+#            max-attempts: 5
+#          rabbitListenerContainerFactory2:
+#            concurrency: 3

@@ -13,7 +13,7 @@ public class MessageDlqListener {
 	
 	private final MessageService messageService;
 	
-	@RabbitListener(queues = TopicNames.QUEUE_NAME_DLQ, containerFactory = "rabbitListenerContainerFactory", group = "executores")
+	@RabbitListener(queues = TopicNames.QUEUE_NAME_DLQ, containerFactory = "dlqRabbitListenerContainerFactory", group = "executores")
 	public void listener(Mensagem mensagem) throws Exception {
 		messageService.listenerDlq(mensagem);
 	}
