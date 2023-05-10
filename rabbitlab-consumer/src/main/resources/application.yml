@@ -10,5 +10,6 @@ spring:
     listener:
       simple:
         consumers: 5 # customizada // define 5 threads simultâneas
+        dlq-consumers: 3 # customizada // define 5 threads simultâneas
         group: executores
         acknowledge-mode: auto

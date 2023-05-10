@@ -25,6 +25,9 @@ public class RabbitConfig {
 	
 	@Value("${spring.rabbitmq.listener.simple.consumers:1}")
 	private int consumers;
+	
+	@Value("${spring.rabbitmq.listener.simple.dlq-consumers:1}")
+	private int dlqConsumers;
 
 	@Bean
 	public RabbitAdmin rabbitAdmin(ConnectionFactory connectionFactory) {
@@ -79,8 +82,8 @@ public class RabbitConfig {
 		SimpleRabbitListenerContainerFactory factory = new SimpleRabbitListenerContainerFactory();
 		factory.setConnectionFactory(connectionFactory);
 		factory.setMessageConverter(messageConverter);
-		log.info("Número de consumidores DLQ [{}]", consumers);
-		factory.setConcurrentConsumers(consumers);
+		log.info("Número de consumidores DLQ [{}]", dlqConsumers);
+		factory.setConcurrentConsumers(dlqConsumers);
 		factory.setErrorHandler(new ConditionalRejectingErrorHandler(new ConditionalRejectingErrorHandler.DefaultExceptionStrategy()));
 
 		// configura o retry utilizando o RetryInterceptorBuilder
