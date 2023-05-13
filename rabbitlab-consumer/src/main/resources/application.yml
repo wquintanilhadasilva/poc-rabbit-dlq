@@ -2,6 +2,21 @@ server:
   port: 8082
 
 spring:
+  task: # configura o comportamento dos métodos anotados com @Async (ativado pelo @EnableAsync)
+    execution:
+      pool:
+        core-size: 50
+        max-size: 100
+        queue-capacity: 1000
+        keep-alive: 60s
+      shutdown:
+        await-termination: true        # indica se deve aguardar a conclusão das tarefas antes de encerrar o executor e a aplicação
+        await-termination-period: 5s   # tempo de espera para conlusão de tarefas após receber comando para encerrar
+        interrupt-on-shutdown: true    # como é caso de download, pode interromper as tarefas que não gera instabilidade
+      timeout:
+        shutdown: 15s                  # tempo máximo esperado para encerrar todas as tarefas após receber comando de shutdown
+        await-termination: 30s         # tempo máximo que o executor de tarefas deve esperar pelas tarefas em andamento para serem concluídas após o
+        # encerramento do executor ter sido iniciado
   rabbitmq:
     host: localhost
     port: 5672

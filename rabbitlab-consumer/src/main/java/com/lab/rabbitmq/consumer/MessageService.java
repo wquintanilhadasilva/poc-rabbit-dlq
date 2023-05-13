@@ -2,13 +2,15 @@ package com.lab.rabbitmq.consumer;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.AmqpRejectAndDontRequeueException;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 
 @Service
 @Slf4j
 public class MessageService {
-	
+
+	@Async
 	public void listener(Mensagem mensagem) throws Exception {
 		LocalDateTime lt = LocalDateTime.now();
 		log.info(lt.toString());
@@ -18,7 +20,8 @@ public class MessageService {
 		}
 		log.info("Sou o processador e CONSUMO essa mensagem: [{}]", mensagem);
 	}
-	
+
+	@Async
 	public void listenerDlq(Mensagem mensagem) throws Exception {
 		LocalDateTime lt = LocalDateTime.now();
 		log.info(lt.toString());
