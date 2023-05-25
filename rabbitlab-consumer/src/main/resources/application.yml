@@ -26,5 +26,6 @@ spring:
       simple:
         consumers: 5 # customizada // define 5 threads simultâneas
         dlq-consumers: 3 # customizada // define 5 threads simultâneas
+        prefetch: 10 # máximo de confirmação de entrega por vez
         group: executores
         acknowledge-mode: auto

@@ -14,6 +14,7 @@ import org.springframework.amqp.rabbit.listener.ConditionalRejectingErrorHandler
 import org.springframework.amqp.rabbit.retry.RejectAndDontRequeueRecoverer;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.amqp.RabbitProperties;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Bean;
@@ -28,6 +29,9 @@ public class RabbitConfig {
 	
 	@Value("${spring.rabbitmq.listener.simple.dlq-consumers:1}")
 	private int dlqConsumers;
+	
+	@Value("${spring.rabbitmq.listener.simple.prefetch:5}")
+	private int prefetchCount;
 
 	@Bean
 	public RabbitAdmin rabbitAdmin(ConnectionFactory connectionFactory) {
@@ -57,12 +61,14 @@ public class RabbitConfig {
 	
 	@Bean
 	public SimpleRabbitListenerContainerFactory rabbitListenerContainerFactory(ConnectionFactory connectionFactory,
-			Jackson2JsonMessageConverter messageConverter) {
+																			   Jackson2JsonMessageConverter messageConverter) {
 		SimpleRabbitListenerContainerFactory factory = new SimpleRabbitListenerContainerFactory();
 		factory.setConnectionFactory(connectionFactory);
 		factory.setMessageConverter(messageConverter);
 		log.info("Número de consumidores [{}]", consumers);
 		factory.setConcurrentConsumers(consumers);
+		log.info("Máximo de confirmação de leitura por vez [{}]", prefetchCount);
+		factory.setPrefetchCount(prefetchCount);
 		factory.setErrorHandler(new ConditionalRejectingErrorHandler(new ConditionalRejectingErrorHandler.DefaultExceptionStrategy()));
 		
 		// configura o retry utilizando o RetryInterceptorBuilder
@@ -82,8 +88,10 @@ public class RabbitConfig {
 		SimpleRabbitListenerContainerFactory factory = new SimpleRabbitListenerContainerFactory();
 		factory.setConnectionFactory(connectionFactory);
 		factory.setMessageConverter(messageConverter);
-		log.info("Número de consumidores DLQ [{}]", dlqConsumers);
+		log.info("DLQ -> Número de consumidores [{}]", dlqConsumers);
 		factory.setConcurrentConsumers(dlqConsumers);
+		log.info("DLQ -> Máximo de confirmação de leitura por vez [{}]", prefetchCount);
+		factory.setPrefetchCount(prefetchCount);
 		factory.setErrorHandler(new ConditionalRejectingErrorHandler(new ConditionalRejectingErrorHandler.DefaultExceptionStrategy()));
 
 		// configura o retry utilizando o RetryInterceptorBuilder
