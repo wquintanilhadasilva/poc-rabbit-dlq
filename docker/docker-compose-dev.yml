@@ -14,3 +14,8 @@ services:
     environment:
       - RABBITMQ_USER=guest
       - RABBITMQ_PASSWORD=guest
+    volumes:
+      - rabbit_data:/var/lib/rabbitmq/
+
+volumes:
+  rabbit_data:
